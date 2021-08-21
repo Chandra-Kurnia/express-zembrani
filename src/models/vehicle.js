@@ -27,6 +27,12 @@ const showVehicle = (id) =>
     });
   });
 
+  const getPopular = () => new Promise((resolve, reject) => {
+    connection.query('SELECT * FROM vehicles ORDER BY count_rental DESC limit 0,4', (err, result) => {
+      promiseResolveReject(resolve, reject, err, result)
+    })
+  })
+
 const addVehicle = (data, image) =>
   new Promise((resolve, reject) => {
     connection.query('INSERT INTO vehicles SET ?', data, (err, result) => {
@@ -54,4 +60,5 @@ export default {
   addVehicle,
   updateVehicle,
   deleteVehicle,
+  getPopular
 };

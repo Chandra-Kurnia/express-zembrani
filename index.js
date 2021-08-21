@@ -4,6 +4,7 @@ import path from 'path';
 import 'dotenv/config';
 import cors from 'cors';
 import vehicle from './src/routes/vehicle.js'
+import user from './src/routes/user.js'
 import { responseError } from './src/helpers/helpers.js';
 
 const app = Express();
@@ -16,6 +17,7 @@ app.use('/public', Express.static(path.resolve('./public')));
 app.use('/file', Express.static(path.resolve('./src/assets/img/')));
 
 app.use('/vehicle', vehicle)
+app.use('/user', user)
 
 app.use('*', (req, res, next) => {
   next(new Error('Endpoint Not Found'));

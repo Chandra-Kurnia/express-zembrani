@@ -60,7 +60,18 @@ const showVehicle = (req, res, next) => {
   vehicleModel
     .showVehicle(id)
     .then((result) => {
-      response(res, 'Success', 200, 'Succes show vehicles', result[0]);
+      response(res, 'Success', 200, 'Success show vehicles', result[0]);
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+
+const getPopular = (req, res, next) => {
+  vehicleModel
+    .getPopular()
+    .then((result) => {
+      response(res, 'Success', 200, '4 data popular successfully loaded', result);
     })
     .catch((err) => {
       next(err);
@@ -168,4 +179,5 @@ export default {
   showVehicle,
   updateVehicle,
   deleteVehicle,
+  getPopular,
 };

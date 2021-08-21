@@ -9,6 +9,7 @@ const router = express.Router();
 router
   .get('/', vehicleController.getVechile)
   .get('/:id', vehicleController.showVehicle)
+  .get('/4/popular', vehicleController.getPopular)
   .post('/', imgValidation.convertImgVehicle,vehicleValidatons.createVehicleFieldRules(), resultOftValidation ,vehicleController.addVehicle)
   .post('/:id', vehicleValidatons.updateVehicleFieldRules(), resultOftValidation, vehicleController.updateVehicle)
   .delete('/:id', vehicleController.deleteVehicle);
