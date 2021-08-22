@@ -73,6 +73,23 @@ const updatecountrental = (count_rental, vehicle_id) =>
     );
   });
 
+const rental = (data) =>
+  new Promise((resolve, reject) => {
+    connection.query('INSERT INTO rentals SET ?', data, (err, result) => {
+      promiseResolveReject(resolve, reject, err, result);
+    });
+  });
+
+const updateVehicleWhenRented = (quantity_rented, vehicle_id) =>
+  new Promise((resolve, reject) => {
+    connection.query(
+      `UPDATE vehicles SET count_rental = count_rental + 1, rented = rented + ${quantity_rented}, remain = remain - ${quantity_rented} WHERE vehicle_id = ${vehicle_id}`,
+      (err, result) => {
+        promiseResolveReject(resolve, reject, err, result);
+      }
+    );
+  });
+
 export default {
   getVehicle,
   showVehicle,
@@ -81,4 +98,6 @@ export default {
   deleteVehicle,
   getPopular,
   updatecountrental,
+  rental,
+  updateVehicleWhenRented
 };

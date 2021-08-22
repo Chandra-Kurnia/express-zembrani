@@ -88,6 +88,7 @@ const addVehicle = (req, res, next) => {
     status,
     stock,
     description,
+    remain: stock,
   };
   if (req.files.vehicle_img) {
     const filename = uuidv4() + path.extname(req.files.vehicle_img.name);
@@ -191,6 +192,45 @@ const addtohomepage = async (req, res, next) => {
   }
 };
 
+const removefromhomepage = async (req, res, next) => {
+  try {
+    const {id} = req.params;
+    const getopularvehicle = await vehicleModel.getPopular();
+    const mostpopularvehicle = getopularvehicle[3];
+    vehicleModel
+      .updatecountrental(mostpopularvehicle.count_rental - 1, id)
+      .then(() => {
+        response(res, 'Success', 200, 'sucessfully remove from homepage');
+      })
+      .catch((err) => {
+        responseError(res, 'Error', 500, 'Failed remove from homepage, please try again later', err);
+      });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const rental = async (req, res, next) => {
+  try {
+    const data = req.body;
+    const createRental = await vehicleModel.rental(data);
+    if (createRental.affectedRows === 1) {
+      vehicleModel
+        .updateVehicleWhenRented(data.quantity, data.vehicle_id)
+        .then(() => {
+          response(res, 'Success', 200, 'Rental successfull', data);
+        })
+        .catch((err) => {
+          responseError(res, 'Error', 500, 'Failed update vehicle when rental please try again later', err);
+        });
+    } else {
+      responseError(res, 'Error', 500, 'Failed create data rental please try again later');
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
 export default {
   getVechile,
   addVehicle,
@@ -199,4 +239,6 @@ export default {
   deleteVehicle,
   getPopular,
   addtohomepage,
+  removefromhomepage,
+  rental,
 };

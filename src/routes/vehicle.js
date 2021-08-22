@@ -11,7 +11,9 @@ router
   .get('/:id', vehicleController.showVehicle)
   .get('/4/popular', vehicleController.getPopular)
   .get('/addtohomepage/:id', vehicleController.addtohomepage)
+  .get('/removefromhomepage/:id', vehicleController.removefromhomepage)
   .post('/', imgValidation.convertImgVehicle,vehicleValidatons.createVehicleFieldRules(), resultOftValidation ,vehicleController.addVehicle)
   .post('/:id', vehicleValidatons.updateVehicleFieldRules(), resultOftValidation, vehicleController.updateVehicle)
+  .post('/R/rental/', vehicleValidatons.rentalVehicleFieldRules(), resultOftValidation, vehicleController.rental)
   .delete('/:id', vehicleController.deleteVehicle)
 export default router;

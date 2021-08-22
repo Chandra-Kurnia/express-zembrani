@@ -67,7 +67,21 @@ const updateVehicleFieldRules = () => [
   body('description').notEmpty().withMessage('Please type the vehicle descripton'),
 ];
 
+const rentalVehicleFieldRules = () => [
+  body('vehicle_id').notEmpty().withMessage('Vehicle_id is empty!'),
+  body('cost').notEmpty().withMessage('Cost is empty !'),
+  body('start_date').notEmpty().withMessage('Start date is empty!'),
+  body('return_date').notEmpty().withMessage('Return date is empty!'),
+  body('quantity')
+    .notEmpty()
+    .withMessage('quantity is empty!')
+    .bail()
+    .isNumeric()
+    .withMessage('Quantity must be number'),
+];
+
 export default {
   createVehicleFieldRules,
   updateVehicleFieldRules,
+  rentalVehicleFieldRules
 };
