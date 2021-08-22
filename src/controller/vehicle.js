@@ -173,6 +173,24 @@ const deleteVehicle = (req, res, next) => {
     });
 };
 
+const addtohomepage = async (req, res, next) => {
+  try {
+    const {id} = req.params;
+    const getopularvehicle = await vehicleModel.getPopular();
+    const mostpopularvehicle = getopularvehicle[0];
+    vehicleModel
+      .updatecountrental(mostpopularvehicle.count_rental + 1, id)
+      .then(() => {
+        response(res, 'Success', 200, 'sucessfully add to homepage');
+      })
+      .catch((err) => {
+        responseError(res, 'Error', 500, 'Failed add to homepage, please try again later', err);
+      });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export default {
   getVechile,
   addVehicle,
@@ -180,4 +198,5 @@ export default {
   updateVehicle,
   deleteVehicle,
   getPopular,
+  addtohomepage,
 };
