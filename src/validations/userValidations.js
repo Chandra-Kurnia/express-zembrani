@@ -23,6 +23,37 @@ const fieldRegisterRules = () => [
     .withMessage('Your pasword must have number')
 ]
 
+const fieldForgotPasswordRules = () => [
+    body('email')
+    .notEmpty()
+    .withMessage('Please insert your email to reset your password')
+    .bail()
+    .isEmail()
+    .withMessage('Your email is invalid')
+]
+
+const fieldChangePasswordRules = () => [
+    body('password')
+    .notEmpty()
+    .withMessage('Plese insert your password')
+    .isLength({min:8, max:15})
+    .withMessage('Password min 8 & max 15 character')
+    .bail()
+    .matches('[A-Z]')
+    .withMessage('Your password must have uppercase')
+    .bail()
+    .matches('[a-z]')
+    .withMessage('Your password must have lowercase')
+    .bail()
+    .matches('[0-9]')
+    .withMessage('Your pasword must have number'),
+    body('password2')
+    .notEmpty()
+    .withMessage('Please verify your password')
+]
+
 export default {
-    fieldRegisterRules
+    fieldRegisterRules,
+    fieldForgotPasswordRules,
+    fieldChangePasswordRules
 }

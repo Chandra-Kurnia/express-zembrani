@@ -22,8 +22,16 @@ const activation = (user_id) =>
     });
   });
 
+const changepassword = (newpassword, user_id) =>
+  new Promise((resolve, reject) => {
+    connection.query('UPDATE users SET password = ? WHERE user_id = ?', [newpassword, user_id], (err, result) => {
+      promiseResolveReject(resolve, reject, err, result);
+    });
+  });
+
 export default {
   showUser,
   register,
   activation,
+  changepassword,
 };
