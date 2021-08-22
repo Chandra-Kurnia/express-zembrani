@@ -6,6 +6,7 @@ import cors from 'cors';
 import vehicle from './src/routes/vehicle.js'
 import user from './src/routes/user.js'
 import types from './src/routes/types.js'
+import locations from './src/routes/locations.js'
 import { responseError } from './src/helpers/helpers.js';
 
 const app = Express();
@@ -20,6 +21,7 @@ app.use('/file', Express.static(path.resolve('./src/assets/img/')));
 app.use('/vehicle', vehicle)
 app.use('/user', user)
 app.use('/types', types)
+app.use('/locations', locations)
 
 app.use('*', (req, res, next) => {
   next(new Error('Endpoint Not Found'));
