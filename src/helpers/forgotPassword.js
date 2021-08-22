@@ -14,7 +14,7 @@ const sendEmailForgotPw = (toEmail, token, name) => {
           cid: 'forgotpw',
         },
       ],
-      html: forgotpw(`${process.env.FRONT_END_ACTIVATION_URL}/verified-accounts/${token}`, name),
+      html: forgotpw(`http://localhost:3000/auth/changepassword/${token}`, name),
     })
     .then((result) => {
       console.log('Nodemailer success');

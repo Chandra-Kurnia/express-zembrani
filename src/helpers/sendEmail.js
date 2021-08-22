@@ -14,7 +14,7 @@ const sendEmail = (toEmail, token, name) => {
           cid: 'email',
         },
       ],
-      html: email(`${process.env.FRONT_END_ACTIVATION_URL}/verified-accounts/${token}`, name),
+      html: email(`http://localhost:3000/verifyemail/${token}`, name),
     })
     .then((result) => {
       console.log('Nodemailer success');

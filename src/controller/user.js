@@ -42,9 +42,10 @@ const register = async (req, res, next) => {
         .catch((err) => {
           responseError(res, 'Error', 500, 'Failed register, please try again later', err);
         });
-    }
-  } catch {
-    next(err);
+      }
+    } catch {
+    responseError(res, 'Error', 500, 'Failed register, please try again later', err);
+    // next(err);
   }
 };
 
@@ -99,7 +100,6 @@ const changePassword = async (req, res, next) => {
   try {
     const {decoded} = req;
     const {password, password2} = req.body;
-    console.log(req.body);
     if (password === password2) {
       const salt = await bcrypt.genSalt(10);
       const newpassword = await bcrypt.hash(password, salt);

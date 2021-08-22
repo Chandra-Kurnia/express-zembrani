@@ -53,7 +53,7 @@ const templateEmail = (link, name) => `
         <img src="cid:email" alt="">
         <h2>Verify your email address</h2>
         <p>
-            Hi <strong>${name}, </strong> thank you for registering zwallet <br>
+            Hi <strong>${name}, </strong> thank you for registering Zembrani <br>
             Please verify this email by clicking button below
         </p>
         <a href="${link}" class="" style="
