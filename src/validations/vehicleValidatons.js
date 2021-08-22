@@ -1,9 +1,9 @@
 import {body} from 'express-validator';
 
 const createVehicleFieldRules = () => [
+  body('vehicle_name').notEmpty().withMessage('Please input your vehicle name'),
   body('location_id').notEmpty().withMessage('Location Id is empty !'),
   body('type_id').notEmpty().withMessage('Type id is empty !'),
-  body('vehicle_name').notEmpty().withMessage('Please input your vehicle name'),
   body('price')
     .notEmpty()
     .withMessage('Please insert your vehicle price / day')

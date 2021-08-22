@@ -1,7 +1,7 @@
 import {response, responseError} from '../helpers/helpers.js';
 import userModel from '../models/user.js';
 import bcrypt from 'bcrypt';
-import jwt, {decode} from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import sendEmail from '../helpers/sendEmail.js';
 import sendEmailForgotPw from '../helpers/forgotPassword.js';
 
