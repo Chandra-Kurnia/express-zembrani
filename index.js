@@ -3,25 +3,31 @@ import fileUpload from 'express-fileupload';
 import path from 'path';
 import 'dotenv/config';
 import cors from 'cors';
-import vehicle from './src/routes/vehicle.js'
-import user from './src/routes/user.js'
-import types from './src/routes/types.js'
-import locations from './src/routes/locations.js'
-import { responseError } from './src/helpers/helpers.js';
+import vehicle from './src/routes/vehicle.js';
+import user from './src/routes/user.js';
+import types from './src/routes/types.js';
+import locations from './src/routes/locations.js';
+import {responseError} from './src/helpers/helpers.js';
+import cookieParser from 'cookie-parser';
 
 const app = Express();
 const port = process.env.PORT || 8080;
 
-app.use(cors());
+const corsOpt = {
+  credentials: true,
+  origin: 'http://localhost:3000',
+};
+app.use(cors(corsOpt));
 app.use(Express.json());
 app.use(fileUpload());
+app.use(cookieParser());
 app.use('/public', Express.static(path.resolve('./public')));
 app.use('/file', Express.static(path.resolve('./src/assets/img/')));
 
-app.use('/vehicle', vehicle)
-app.use('/user', user)
-app.use('/types', types)
-app.use('/locations', locations)
+app.use('/vehicle', vehicle);
+app.use('/user', user);
+app.use('/types', types);
+app.use('/locations', locations);
 
 app.use('*', (req, res, next) => {
   next(new Error('Endpoint Not Found'));

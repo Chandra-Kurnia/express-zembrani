@@ -42,8 +42,8 @@ const register = async (req, res, next) => {
         .catch((err) => {
           responseError(res, 'Error', 500, 'Failed register, please try again later', err);
         });
-      }
-    } catch {
+    }
+  } catch {
     responseError(res, 'Error', 500, 'Failed register, please try again later', err);
     // next(err);
   }
@@ -119,10 +119,55 @@ const changePassword = async (req, res, next) => {
   }
 };
 
+const login = async (req, res, next) => {
+  try {
+    const {email, password} = req.body;
+    const user = await userModel.showUser(email);
+    if (user.length > 0) {
+      if (user[0].activation === '0') {
+        responseError(res, 'Not verified', 400, 'Your email not verified', {});
+      } else {
+        bcrypt.compare(password, user[0].password, (err, result) => {
+          if (!err) {
+            if (result) {
+              delete user[0].password;
+              jwt.sign({...user[0]}, process.env.ACCESS_TOKEN_SECRET_KEY, (err, token) => {
+                if (!err) {
+                  user[0].token = token;
+                  res.cookie('token', token, {
+                    httpOnly: true,
+                    maxAge: 60 * 60 * 60,
+                    secure: true,
+                    path: '/',
+                    sameSite: 'strict',
+                  });
+                  response(res, 'Sucess', 200, 'Login Successfull', user[0]);
+                } else {
+                  console.log(err);
+                  responseError(res, 'Error', 500, 'Failed create access token');
+                }
+              });
+            } else {
+              responseError(res, 'Error', 400, 'Your password is wrong');
+            }
+          } else {
+            responseError(res, 'Error', 500, 'Login error, please try again later');
+          }
+        });
+      }
+    } else {
+      responseError(res, 'User not found', 400, 'Your email not found', {});
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
 export default {
   register,
   activationAccount,
   forgotPassword,
   checkTokenForgotPassword,
   changePassword,
+  login,
 };

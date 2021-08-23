@@ -22,5 +22,6 @@ router
     resultOftValidation,
     checktoken.checkTokenForgotPassword,
     userController.changePassword
-  );
+  )
+  .post('/login', userValidations.fieldLoginRules(), resultOftValidation, userController.login);
 export default router;
