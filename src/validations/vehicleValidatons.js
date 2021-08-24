@@ -68,6 +68,7 @@ const updateVehicleFieldRules = () => [
 ];
 
 const rentalVehicleFieldRules = () => [
+  body('user_id').notEmpty().withMessage('user_id is empty!'),
   body('vehicle_id').notEmpty().withMessage('Vehicle_id is empty!'),
   body('cost').notEmpty().withMessage('Cost is empty !'),
   body('start_date').notEmpty().withMessage('Start date is empty!'),

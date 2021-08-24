@@ -141,6 +141,13 @@ const login = async (req, res, next) => {
                     path: '/',
                     sameSite: 'strict',
                   });
+                  res.cookie('user_id', user[0].user_id, {
+                    httpOnly: true,
+                    maxAge: 60 * 60 * 60,
+                    secure: true,
+                    path: '/',
+                    sameSite: 'strict',
+                  });
                   response(res, 'Sucess', 200, 'Login Successfull', user[0]);
                 } else {
                   console.log(err);
@@ -156,7 +163,7 @@ const login = async (req, res, next) => {
         });
       }
     } else {
-      responseError(res, 'User not found', 400, 'Your email not found', {});
+      responseError(res, 'User not found', 400, 'Your email not found');
     }
   } catch (error) {
     next(error);
