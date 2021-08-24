@@ -8,6 +8,7 @@ import user from './src/routes/user.js';
 import types from './src/routes/types.js';
 import locations from './src/routes/locations.js';
 import history from './src/routes/history.js'
+import rental from  './src/routes/rental.js'
 import {responseError} from './src/helpers/helpers.js';
 import cookieParser from 'cookie-parser';
 
@@ -30,6 +31,7 @@ app.use('/user', user);
 app.use('/types', types);
 app.use('/locations', locations);
 app.use('/history', history)
+app.use('/rental', rental)
 
 app.use('*', (req, res, next) => {
   next(new Error('Endpoint Not Found'));
