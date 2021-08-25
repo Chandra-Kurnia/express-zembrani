@@ -5,5 +5,10 @@ import resultOftValidation from '../validations/validationResult.js';
 
 const router = express.Router();
 
-router.post('/updaterental', rentalValidation.updateRentalFieldRules(), resultOftValidation, rentalController.updateRental);
+router.post(
+  '/updaterental',
+  rentalValidation.updateRentalFieldRules(),
+  resultOftValidation,
+  rentalController.updateRental
+);
 export default router;

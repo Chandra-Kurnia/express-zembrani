@@ -23,13 +23,21 @@ const getallhistory = (user_id) =>
 const showHistory = (rental_id) =>
   new Promise((resolve, reject) => {
     connection.query(
-      `select rentals.rental_id, vehicles.vehicle_id, vehicles.vehicle_name, (select locations.location_name from locations inner join vehicles on locations.location_id = vehicles.location_id where vehicle_id = rentals.vehicle_id) as location_name, (select types.type_name from types inner join vehicles on vehicles.type_id = types.type_id where vehicle_id = rentals.vehicle_id) as vehicle_type, vehicles.price, rentals.quantity, rentals.cost, rentals.start_date, rentals.return_date, users.name, users.phone_number, users.email  from rentals inner join vehicles on rentals.vehicle_id = vehicles.vehicle_id inner join users on rentals.user_id = users.user_id where rental_id = ${rental_id}`,
+      `select rentals.rental_id, vehicles.vehicle_id, vehicles.vehicle_name, vehicles.image, (select locations.location_name from locations inner join vehicles on locations.location_id = vehicles.location_id where vehicle_id = rentals.vehicle_id) as location_name, (select types.type_name from types inner join vehicles on vehicles.type_id = types.type_id where vehicle_id = rentals.vehicle_id) as vehicle_type, vehicles.price, rentals.quantity, rentals.cost, rentals.start_date, rentals.status,rentals.return_date, users.name, users.phone_number, users.email  from rentals inner join vehicles on rentals.vehicle_id = vehicles.vehicle_id inner join users on rentals.user_id = users.user_id where rental_id = ${rental_id}`,
       (err, result) => {
         promiseResolveReject(resolve, reject, err, result);
       }
     );
   });
+
+const deleteHistory = (rental_id, deleteBy) =>
+  new Promise((resolve, reject) => {
+    connection.query(`update rentals set ${deleteBy} = '1' where rental_id = ${rental_id}`, (err, result) => {
+      promiseResolveReject(resolve, reject, err, result);
+    });
+  });
 export default {
   getallhistory,
   showHistory,
+  deleteHistory,
 };

@@ -172,6 +172,7 @@ const login = async (req, res, next) => {
 
 const responseDataUser = (req, res, next) => {
   const dataUser = req.userLogin
+  // console.log(dataUser);
   response(res, 'Success', 200, 'All data success loaded', dataUser)
 }
 

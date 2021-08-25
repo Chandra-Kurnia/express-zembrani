@@ -68,7 +68,7 @@ const showVehicle = (req, res, next) => {
 };
 
 const getPopular = (req, res, next) => {
-  console.log(req.headers.cookie);
+  // console.log(req.headers);
   vehicleModel
     .getPopular()
     .then((result) => {

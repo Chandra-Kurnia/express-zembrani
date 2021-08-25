@@ -3,7 +3,9 @@ import { responseError } from '../helpers/helpers.js';
 
 export const Auth = (req, res, next) => {
   try {
-    const accessToken = req.headers.cookie;    
+    let Token = req.headers.cookie;
+    const accessToken=Token.slice(6)
+    console.log(accessToken);
     if (!accessToken) {
       return responseError(res, 'Authorized failed', 401, 'Server need accessToken', []);
     }

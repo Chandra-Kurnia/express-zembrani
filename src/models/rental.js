@@ -8,10 +8,10 @@ const updateRental = (rental_id, status) =>
     });
   });
 
-const updateVehicle = (quantity) =>
+const updateVehicle = (quantity, vehicle_id) =>
   new Promise((resolve, reject) => {
     connection.query(
-      `update vehicles set rented = rented - ${quantity}, remain = remain + ${quantity}`,
+      `update vehicles set rented = rented - ${quantity}, remain = remain + ${quantity} WHERE vehicle_id = ${vehicle_id}`,
       (err, result) => {
         promiseResolveReject(resolve, reject, err, result);
       }

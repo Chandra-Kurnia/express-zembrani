@@ -25,5 +25,5 @@ router
     userController.changePassword
   )
   .post('/login', userValidations.fieldLoginRules(), resultOftValidation, userController.login)
-  .post('/checktoken', Auth, userController.responseDataUser)
+  .get('/checktoken', Auth, userController.responseDataUser)
 export default router;

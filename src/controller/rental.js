@@ -5,13 +5,13 @@ import historyModel from '../models/history.js';
 const updateRental = async (req, res, next) => {
   const {rental_id, status} = req.body;
   const resDataRental = await historyModel.showHistory(rental_id);
-  const {quantity} = resDataRental[0];
+  const {quantity, vehicle_id} = resDataRental[0];
   rentalModel
     .updateRental(rental_id, status)
     .then(() => {
       if (status === 'returned' || status === 'canceled') {
         rentalModel
-          .updateVehicle(quantity)
+          .updateVehicle(quantity, vehicle_id)
           .then(() => {
             response(res, 'Success', 200, 'Successfully updated status rental & data vehicle');
           })
