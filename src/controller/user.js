@@ -4,6 +4,9 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import sendEmail from '../helpers/sendEmail.js';
 import sendEmailForgotPw from '../helpers/forgotPassword.js';
+import {v4 as uuidv4} from 'uuid';
+import path from 'path';
+import fs from 'fs';
 
 const register = async (req, res, next) => {
   try {
@@ -17,6 +20,7 @@ const register = async (req, res, next) => {
         name,
         email,
         password: await bcrypt.hash(req.body.password, salt),
+        avatar: '/public/img/avatar/user.png',
       };
       userModel
         .register(form)
@@ -171,10 +175,47 @@ const login = async (req, res, next) => {
 };
 
 const responseDataUser = (req, res, next) => {
-  const dataUser = req.userLogin
+  const dataUser = req.userLogin;
   // console.log(dataUser);
-  response(res, 'Success', 200, 'All data success loaded', dataUser)
-}
+  response(res, 'Success', 200, 'All data success loaded', dataUser);
+};
+
+const updateProfile = (req, res, next) => {
+  const {email, user_id} = req.userLogin;
+  let data = req.body;
+  userModel
+    .showUser(email)
+    .then((result) => {
+      data = {...data, avatar: result[0].avatar};
+
+      if (req.files) {
+        const filename = uuidv4() + path.extname(req.files.avatar.name);
+        const savePath = path.join(path.dirname(''), '/public/img/avatar', filename);
+        data = {...data, avatar: `/public/img/avatar/${filename}`};
+        req.files.avatar.mv(savePath);
+        if (result[0].avatar !== '/public/img/avatar/user.png') {
+          fs.unlink(`./${result[0].avatar}`, (err) => {
+            if (err) {
+              responseError(res, 'Error', 500, 'Error upload image', err);
+            }
+          });
+        }
+      }
+
+      userModel
+        .updateProfile(data, user_id)
+        .then(() => {
+          response(res, 'Success', 200, 'Succesfully updated data');
+        })
+        .catch((err) => {
+          responseError(res, 'Error', 500, 'Update failed, try again later', err);
+        });
+    })
+    .catch((err) => {
+      responseError(res, 'Error', 500, 'Data failed to load', err);
+      console.log(err);
+    });
+};
 
 export default {
   register,
@@ -183,5 +224,6 @@ export default {
   checkTokenForgotPassword,
   changePassword,
   login,
-  responseDataUser
+  responseDataUser,
+  updateProfile,
 };

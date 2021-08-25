@@ -29,9 +29,17 @@ const changepassword = (newpassword, user_id) =>
     });
   });
 
+const updateProfile = (data, user_id) =>
+  new Promise((resolve, reject) => {
+    connection.query(`update users set ? where user_id = ${user_id}`, data, (err, result) => {
+      promiseResolveReject(resolve, reject, err, result);
+    });
+  });
+
 export default {
   showUser,
   register,
   activation,
   changepassword,
+  updateProfile,
 };

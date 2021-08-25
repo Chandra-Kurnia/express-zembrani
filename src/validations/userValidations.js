@@ -60,9 +60,22 @@ const fieldLoginRules = () => [
   body('password').notEmpty().withMessage('Please insert you password'),
 ];
 
+const fieldUpdateRules = () => [
+  body('email')
+  .notEmpty()
+  .withMessage('email cant empty')
+  .bail()
+  .isEmail()
+  .withMessage('your email is invalid'),
+  body('name')
+  .notEmpty()
+  .withMessage('name cant emtpy')
+]
+
 export default {
   fieldRegisterRules,
   fieldForgotPasswordRules,
   fieldChangePasswordRules,
   fieldLoginRules,
+  fieldUpdateRules
 };

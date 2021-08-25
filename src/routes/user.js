@@ -26,4 +26,5 @@ router
   )
   .post('/login', userValidations.fieldLoginRules(), resultOftValidation, userController.login)
   .get('/checktoken', Auth, userController.responseDataUser)
+  .post('/updateprofile', userValidations.fieldUpdateRules(), Auth ,userController.updateProfile)
 export default router;
