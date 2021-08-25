@@ -4,6 +4,9 @@ import { responseError } from '../helpers/helpers.js';
 export const Auth = (req, res, next) => {
   try {
     let Token = req.headers.cookie;
+    if(Token === undefined){
+      return responseError(res, 'Error', '400', 'You dont have access', [])
+    }
     const accessToken=Token.slice(6)
     console.log(accessToken);
     if (!accessToken) {

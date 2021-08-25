@@ -18,9 +18,11 @@ router
     imgValidation.convertImgVehicle,
     vehicleValidatons.createVehicleFieldRules(),
     resultOftValidation,
+    Auth,
+    Role('admin'),
     vehicleController.addVehicle
   )
-  .post('/:id', vehicleValidatons.updateVehicleFieldRules(), resultOftValidation, vehicleController.updateVehicle)
+  .post('/:id', Auth, Role('admin'),vehicleValidatons.updateVehicleFieldRules(), resultOftValidation, vehicleController.updateVehicle)
   .post('/R/rental/', vehicleValidatons.rentalVehicleFieldRules(), resultOftValidation, vehicleController.rental)
-  .delete('/:id', vehicleController.deleteVehicle);
+  .delete('/:id', Auth, Role('admin'),vehicleController.deleteVehicle);
 export default router;
