@@ -3,11 +3,12 @@ import vehicleController from '../controller/vehicle.js';
 import vehicleValidatons from '../validations/vehicleValidatons.js';
 import resultOftValidation from '../validations/validationResult.js'
 import imgValidation from '../validations/imgValidation.js';
+import {Auth, Role} from '../middlewares/auth.js'
 
 const router = express.Router();
 
 router
-  .get('/', vehicleController.getVechile)
+  .get('/', Auth, Role('admin', 'user'),vehicleController.getVechile)
   .get('/:id', vehicleController.showVehicle)
   .get('/4/popular', vehicleController.getPopular)
   .get('/addtohomepage/:id', vehicleController.addtohomepage)

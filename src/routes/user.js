@@ -3,6 +3,7 @@ import resultOftValidation from '../validations/validationResult.js';
 import userController from '../../src/controller/user.js';
 import userValidations from '../validations/userValidations.js';
 import checktoken from '../middlewares/checkToken.js';
+import {Auth} from '../middlewares/auth.js'
 
 const router = express.Router();
 
@@ -23,5 +24,6 @@ router
     checktoken.checkTokenForgotPassword,
     userController.changePassword
   )
-  .post('/login', userValidations.fieldLoginRules(), resultOftValidation, userController.login);
+  .post('/login', userValidations.fieldLoginRules(), resultOftValidation, userController.login)
+  .post('/checktoken', Auth, userController.responseDataUser)
 export default router;
