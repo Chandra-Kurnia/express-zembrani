@@ -129,7 +129,7 @@ const login = async (req, res, next) => {
     const user = await userModel.showUser(email);
     if (user.length > 0) {
       if (user[0].activation === '0') {
-        responseError(res, 'Not verified', 400, 'Your email not verified', {});
+        responseError(res, 'Not verified', 400, 'Your email not verified', []);
       } else {
         bcrypt.compare(password, user[0].password, (err, result) => {
           if (!err) {
@@ -159,15 +159,15 @@ const login = async (req, res, next) => {
                 }
               });
             } else {
-              responseError(res, 'Error', 400, 'Your password is wrong');
+              responseError(res, 'Error', 400, 'Your password is wrong', []);
             }
           } else {
-            responseError(res, 'Error', 500, 'Login error, please try again later');
+            responseError(res, 'Error', 500, 'Login error, please try again later', []);
           }
         });
       }
     } else {
-      responseError(res, 'User not found', 400, 'Your email not found');
+      responseError(res, 'User not found', 400, 'Your email not found', []);
     }
   } catch (error) {
     next(error);
@@ -217,6 +217,15 @@ const updateProfile = (req, res, next) => {
     });
 };
 
+const logout = async (req, res, next) => {
+  try {
+    res.clearCookie('token');
+    response(res, 'Success', 200, 'Logout Success');
+  } catch (error) {
+    responseError(res, 'Error', 500,'failed logout', error)
+  }
+};
+
 export default {
   register,
   activationAccount,
@@ -226,4 +235,5 @@ export default {
   login,
   responseDataUser,
   updateProfile,
+  logout,
 };

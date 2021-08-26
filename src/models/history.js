@@ -5,14 +5,14 @@ const getallhistory = (user_id) =>
   new Promise((resolve, reject) => {
     if (user_id === 1) {
       connection.query(
-        `SELECT rentals.rental_id, rentals.cost, rentals.status, rentals.start_date, rentals.return_date, vehicles.vehicle_id, vehicles.vehicle_name, vehicles.image from rentals INNER JOIN vehicles ON rentals.vehicle_id = vehicles.vehicle_id WHERE deletedByAdmin = '0'`,
+        `SELECT rentals.rental_id, rentals.cost, rentals.status, rentals.start_date, rentals.return_date, vehicles.vehicle_id, vehicles.vehicle_name, vehicles.image from rentals INNER JOIN vehicles ON rentals.vehicle_id = vehicles.vehicle_id WHERE deletedByAdmin = '0' order by rental_id desc`,
         (err, result) => {
           promiseResolveReject(resolve, reject, err, result);
         }
       );
     } else {
       connection.query(
-        `SELECT rentals.rental_id, rentals.cost, rentals.status, rentals.start_date, rentals.return_date, vehicles.vehicle_id, vehicles.vehicle_name, vehicles.image from rentals INNER JOIN vehicles ON rentals.vehicle_id = vehicles.vehicle_id WHERE deletedByUser = '0' AND user_id = ${user_id}`,
+        `SELECT rentals.rental_id, rentals.cost, rentals.status, rentals.start_date, rentals.return_date, vehicles.vehicle_id, vehicles.vehicle_name, vehicles.image from rentals INNER JOIN vehicles ON rentals.vehicle_id = vehicles.vehicle_id WHERE deletedByUser = '0' AND user_id = ${user_id} order by rental_id desc`,
         (err, result) => {
           promiseResolveReject(resolve, reject, err, result);
         }

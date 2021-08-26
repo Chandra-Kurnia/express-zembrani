@@ -1,26 +1,25 @@
 import Jwt from 'jsonwebtoken';
-import { responseError } from '../helpers/helpers.js';
+import { response, responseError } from '../helpers/helpers.js';
 
 export const Auth = (req, res, next) => {
   try {
     let Token = req.headers.cookie;
     if(Token === undefined){
-      return responseError(res, 'Error', '400', 'You dont have access', [])
+      return response(res, 'NOT LOGIN', 200, 'USER NOT LOGIN', {})
     }
     const accessToken=Token.slice(6)
-    console.log(accessToken);
     if (!accessToken) {
-      return responseError(res, 'Authorized failed', 401, 'Server need accessToken', []);
+      return responseError(res, 'Authorized failed', 200, 'Server need accessToken', []);
     }
     Jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET_KEY, (err, decode) => {
       if (err) {
         if (err.name === 'TokenExpiredError') {
-          return responseError(res, 'Authorized failed', 401, 'token expired', []);
+          return responseError(res, 'Authorized failed', 200, 'token expired', []);
         }
         if (err.name === 'JsonWebTokenError') {
-          return responseError(res, 'Authorized failed', 401, 'token invalid', []);
+          return responseError(res, 'Authorized failed', 200, 'token invalid', []);
         }
-        return responseError(res, 'Authorized failed', 401, 'token not active', []);
+        return responseError(res, 'Authorized failed', 200, 'token not active', []);
       }
       req.userLogin = decode;
       next();

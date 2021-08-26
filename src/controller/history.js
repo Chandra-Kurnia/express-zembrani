@@ -4,7 +4,7 @@ import rentalModel from '../models/rental.js';
 
 const getHistory = async (req, res, next) => {
   try {
-    const user_id = 20;
+    const user_id = req.userLogin.user_id;
     const histories = await historyModel.getallhistory(user_id);
     if (histories.length > 0) {
       response(res, 'Success', 200, 'All history successfully loaded', histories);
@@ -32,7 +32,7 @@ const showHistory = async (req, res, next) => {
 
 const deleteHistory = async (req, res, next) => {
   const {rental_id} = req.body;
-  const user_id = 20;
+  const user_id = req.userLogin.user_id
   const resDataRental = await historyModel.showHistory(rental_id);
   const {quantity, vehicle_id, status} = resDataRental[0];
   let deletedBy = '';
