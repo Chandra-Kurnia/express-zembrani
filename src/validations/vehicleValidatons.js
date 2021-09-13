@@ -2,8 +2,8 @@ import {body} from 'express-validator';
 
 const createVehicleFieldRules = () => [
   body('vehicle_name').notEmpty().withMessage('Please input your vehicle name'),
-  body('location_id').notEmpty().withMessage('Location Id is empty !'),
-  body('type_id').notEmpty().withMessage('Type id is empty !'),
+  body('location_id').notEmpty().withMessage('Please select a location'),
+  body('type_id').notEmpty().withMessage('Please select a category'),
   body('price')
     .notEmpty()
     .withMessage('Please insert your vehicle price / day')
@@ -43,8 +43,8 @@ const createVehicleFieldRules = () => [
 ];
 
 const updateVehicleFieldRules = () => [
-  body('location_id').notEmpty().withMessage('Location Id is empty !'),
-  body('type_id').notEmpty().withMessage('Type id is empty !'),
+  body('location_id').notEmpty().withMessage('Please select a location'),
+  body('type_id').notEmpty().withMessage('Please select category'),
   body('vehicle_name').notEmpty().withMessage('Please input your vehicle name'),
   body('price')
     .notEmpty()
@@ -68,7 +68,6 @@ const updateVehicleFieldRules = () => [
 ];
 
 const rentalVehicleFieldRules = () => [
-  body('user_id').notEmpty().withMessage('user_id is empty!'),
   body('vehicle_id').notEmpty().withMessage('Vehicle_id is empty!'),
   body('cost').notEmpty().withMessage('Cost is empty !'),
   body('start_date').notEmpty().withMessage('Start date is empty!'),
@@ -84,5 +83,5 @@ const rentalVehicleFieldRules = () => [
 export default {
   createVehicleFieldRules,
   updateVehicleFieldRules,
-  rentalVehicleFieldRules
+  rentalVehicleFieldRules,
 };

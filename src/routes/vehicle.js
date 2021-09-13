@@ -23,6 +23,6 @@ router
     vehicleController.addVehicle
   )
   .post('/:id', Auth, Role('admin'),vehicleValidatons.updateVehicleFieldRules(), resultOftValidation, vehicleController.updateVehicle)
-  .post('/R/rental/', vehicleValidatons.rentalVehicleFieldRules(), resultOftValidation, vehicleController.rental)
+  .post('/R/rental/', Auth,vehicleValidatons.rentalVehicleFieldRules(), resultOftValidation, vehicleController.rental)
   .delete('/:id', Auth, Role('admin'),vehicleController.deleteVehicle);
 export default router;

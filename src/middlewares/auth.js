@@ -9,17 +9,17 @@ export const Auth = (req, res, next) => {
     }
     const accessToken=Token.slice(6)
     if (!accessToken) {
-      return responseError(res, 'Authorized failed', 200, 'Server need accessToken', []);
+      return responseError(res, 'Authorized failed', 400, 'Server need accessToken', []);
     }
     Jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET_KEY, (err, decode) => {
       if (err) {
         if (err.name === 'TokenExpiredError') {
-          return responseError(res, 'Authorized failed', 200, 'token expired', []);
+          return responseError(res, 'Authorized failed', 400, 'token expired', []);
         }
         if (err.name === 'JsonWebTokenError') {
-          return responseError(res, 'Authorized failed', 200, 'token invalid', []);
+          return responseError(res, 'Authorized failed', 400, 'token invalid', []);
         }
-        return responseError(res, 'Authorized failed', 200, 'token not active', []);
+        return responseError(res, 'Authorized failed', 400, 'token not active', []);
       }
       req.userLogin = decode;
       next();

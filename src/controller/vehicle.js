@@ -213,7 +213,9 @@ const removefromhomepage = async (req, res, next) => {
 
 const rental = async (req, res, next) => {
   try {
-    const data = req.body;
+    const user_id = req.userLogin.user_id;
+    let data = req.body;
+    data.user_id = user_id;
     const createRental = await vehicleModel.rental(data);
     if (createRental.affectedRows === 1) {
       vehicleModel
