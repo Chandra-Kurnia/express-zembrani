@@ -13,7 +13,7 @@ import {responseError} from './src/helpers/helpers.js';
 import cookieParser from 'cookie-parser';
 
 const app = Express();
-const port = process.env.PORT || 8080;
+const PORT = process.env.PORT || 8080;
 
 const corsOpt = {
   credentials: true,
@@ -42,6 +42,6 @@ app.use((err, req, res, next) => {
   return responseError(res, 'Error', 500, err.message, []);
 });
 
-app.listen(port, () => {
-  console.log(`server is running on port ${port}`);
+app.listen(PORT, () => {
+  console.log(`server is running on port ${PORT}`);
 });
