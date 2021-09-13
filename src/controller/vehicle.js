@@ -199,7 +199,7 @@ const removefromhomepage = async (req, res, next) => {
     const getopularvehicle = await vehicleModel.getPopular();
     const mostpopularvehicle = getopularvehicle[3];
     vehicleModel
-      .updatecountrental(mostpopularvehicle.count_rental - 1, id)
+      .updatecountrental(mostpopularvehicle.count_rental - 2, id)
       .then(() => {
         response(res, 'Success', 200, 'sucessfully remove from homepage');
       })
