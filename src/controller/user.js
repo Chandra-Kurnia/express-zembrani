@@ -143,7 +143,7 @@ const login = async (req, res, next) => {
                     // maxAge: 60 * 60 * 60,
                     secure: true,
                     path: '/',
-                    sameSite: 'strict',
+                    sameSite: 'none',
                   });
                   // res.cookie('user_id', user[0].user_id, {
                   //   httpOnly: true,
