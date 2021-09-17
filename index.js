@@ -17,8 +17,8 @@ const PORT = process.env.PORT || 8080;
 
 const corsOpt = {
   credentials: true,
-  origin: 'http://localhost:3000',
-  // origin: 'https://next-zembrani.vercel.app',
+  // origin: 'http://localhost:3000',
+  origin: 'https://next-zembrani.vercel.app',
 };
 app.use(cors(corsOpt));
 app.use(Express.json());
