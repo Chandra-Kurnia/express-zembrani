@@ -139,20 +139,13 @@ const login = async (req, res, next) => {
               jwt.sign({ ...user[0] }, process.env.ACCESS_TOKEN_SECRET_KEY, (error, token) => {
                 if (!error) {
                   user[0].token = token;
-                  // res.cookie('token', token, {
-                  //   httpOnly: true,
-                  //   // maxAge: 60 * 60 * 60,
-                  //   secure: true,
-                  //   path: '/',
-                  //   sameSite: 'strict',
-                  // });
-                  // res.cookie('user_id', user[0].user_id, {
-                  //   httpOnly: true,
-                  //   maxAge: 60 * 60 * 60,
-                  //   secure: true,
-                  //   path: '/',
-                  //   sameSite: 'strict',
-                  // });
+                  res.cookie('token', token, {
+                    httpOnly: true,
+                    // maxAge: 60 * 60 * 60,
+                    secure: true,
+                    path: '/',
+                    sameSite: 'strict',
+                  });
                   response(res, 'Sucess', 200, 'Login Successfull', user[0]);
                 } else {
                   console.log(error);
@@ -220,7 +213,13 @@ const updateProfile = (req, res) => {
 
 const logout = async (req, res) => {
   try {
-    res.clearCookie('token');
+    res.clearCookie('token', {
+      httpOnly: true,
+      // maxAge: 60 * 60 * 60,
+      secure: true,
+      path: '/',
+      sameSite: 'strict',
+    });
     response(res, 'Success', 200, 'Logout Success');
   } catch (error) {
     responseError(res, 'Error', 500, 'failed logout', error);
