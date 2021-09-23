@@ -17,6 +17,10 @@ router
     '/',
     imgValidation.convertImgVehicle,
     vehicleValidatons.createVehicleFieldRules(),
+    (req, res, next) => {
+      console.log(req.body);
+      next()
+    }, 
     resultOftValidation,
     Auth,
     Role('admin'),

@@ -138,13 +138,13 @@ const login = async (req, res, next) => {
               jwt.sign({...user[0]}, process.env.ACCESS_TOKEN_SECRET_KEY, (err, token) => {
                 if (!err) {
                   user[0].token = token;
-                  res.cookie('token', token, {
-                    httpOnly: true,
-                    // maxAge: 60 * 60 * 60,
-                    secure: true,
-                    path: '/',
-                    sameSite: 'strict',
-                  });
+                  // res.cookie('token', token, {
+                  //   httpOnly: true,
+                  //   // maxAge: 60 * 60 * 60,
+                  //   secure: true,
+                  //   path: '/',
+                  //   sameSite: 'strict',
+                  // });
                   // res.cookie('user_id', user[0].user_id, {
                   //   httpOnly: true,
                   //   maxAge: 60 * 60 * 60,
