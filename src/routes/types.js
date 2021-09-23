@@ -1,7 +1,7 @@
-import express from 'express';
-import typesController from '../controller/types.js';
+const express = require('express');
+const typesController = require('../controller/types');
 
 const router = express.Router();
 
 router.get('/', typesController.gettypes);
-export default router;
+module.exports = router;

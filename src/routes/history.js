@@ -1,11 +1,11 @@
-import express from 'express';
-import historyController from '../controller/history.js';
-import {Auth, Role} from '../middlewares/auth.js';
+const express = require('express');
+const historyController = require('../controller/history');
+const { Auth } = require('../middlewares/auth');
 
 const router = express.Router();
 
 router
   .get('/getAll', Auth, historyController.getHistory)
   .get('/:id', historyController.showHistory)
-  .post('/deletehistory', Auth,historyController.deleteHistory);
-export default router;
+  .post('/deletehistory', Auth, historyController.deleteHistory);
+module.exports = router;

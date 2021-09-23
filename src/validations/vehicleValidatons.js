@@ -1,4 +1,4 @@
-import {body} from 'express-validator';
+const { body } = require('express-validator');
 
 const createVehicleFieldRules = () => [
   body('vehicle_name').notEmpty().withMessage('Please input your vehicle name'),
@@ -80,7 +80,7 @@ const rentalVehicleFieldRules = () => [
     .withMessage('Quantity must be number'),
 ];
 
-export default {
+module.exports = {
   createVehicleFieldRules,
   updateVehicleFieldRules,
   rentalVehicleFieldRules,

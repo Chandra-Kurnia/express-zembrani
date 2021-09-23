@@ -1,11 +1,12 @@
-import {response, responseError} from '../helpers/helpers.js';
-import rentalModel from '../models/rental.js';
-import historyModel from '../models/history.js';
+/* eslint-disable camelcase */
+const { response, responseError } = require('../helpers/helpers');
+const rentalModel = require('../models/rental');
+const historyModel = require('../models/history');
 
-const updateRental = async (req, res, next) => {
-  const {rental_id, status} = req.body;
+const updateRental = async (req, res) => {
+  const { rental_id, status } = req.body;
   const resDataRental = await historyModel.showHistory(rental_id);
-  const {quantity, vehicle_id} = resDataRental[0];
+  const { quantity, vehicle_id } = resDataRental[0];
   rentalModel
     .updateRental(rental_id, status)
     .then(() => {
@@ -27,6 +28,6 @@ const updateRental = async (req, res, next) => {
     });
 };
 
-export default {
+module.exports = {
   updateRental,
 };
