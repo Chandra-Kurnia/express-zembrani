@@ -144,7 +144,7 @@ const login = async (req, res, next) => {
                     // maxAge: 60 * 60 * 60,
                     secure: true,
                     path: '/',
-                    sameSite: 'strict',
+                    sameSite: 'none',
                   });
                   response(res, 'Sucess', 200, 'Login Successfull', user[0]);
                 } else {
@@ -218,7 +218,7 @@ const logout = async (req, res) => {
       // maxAge: 60 * 60 * 60,
       secure: true,
       path: '/',
-      sameSite: 'strict',
+      sameSite: 'none',
     });
     response(res, 'Success', 200, 'Logout Success');
   } catch (error) {
