@@ -1,7 +1,7 @@
-import express from 'express';
-import rentalController from '../controller/rental.js';
-import rentalValidation from '../validations/rentalValidation.js';
-import resultOftValidation from '../validations/validationResult.js';
+const express = require('express');
+const rentalController = require('../controller/rental');
+const rentalValidation = require('../validations/rentalValidation');
+const resultOftValidation = require('../validations/validationResult');
 
 const router = express.Router();
 
@@ -9,6 +9,6 @@ router.post(
   '/updaterental',
   rentalValidation.updateRentalFieldRules(),
   resultOftValidation,
-  rentalController.updateRental
+  rentalController.updateRental,
 );
-export default router;
+module.exports = router;

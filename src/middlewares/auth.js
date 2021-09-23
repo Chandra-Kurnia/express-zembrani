@@ -1,13 +1,13 @@
-import Jwt from 'jsonwebtoken';
-import { response, responseError } from '../helpers/helpers.js';
+const Jwt = require('jsonwebtoken');
+const { response, responseError } = require('../helpers/helpers');
 
-export const Auth = (req, res, next) => {
+const Auth = (req, res, next) => {
   try {
-    let Token = req.headers.cookie;
-    if(Token === undefined){
-      return response(res, 'NOT LOGIN', 200, 'USER NOT LOGIN', {})
+    const Token = req.headers.cookie;
+    if (Token === undefined) {
+      return response(res, 'NOT LOGIN', 200, 'USER NOT LOGIN', {});
     }
-    const accessToken=Token.slice(6)
+    const accessToken = Token.slice(6);
     if (!accessToken) {
       return responseError(res, 'Authorized failed', 400, 'Server need accessToken', []);
     }
@@ -29,7 +29,7 @@ export const Auth = (req, res, next) => {
   }
 };
 
-export const Role = (...roles) => (req, res, next) => {
+const Role = (...roles) => (req, res, next) => {
   let accesDenied = 0;
   console.log(req.userLogin.roles);
   for (let i = 0; i < roles.length; i += 1) {
@@ -45,4 +45,9 @@ export const Role = (...roles) => (req, res, next) => {
   } else if (accesDenied > 0) {
     responseError(res, 'Access Denied', 403, 'You do not have permission for this service', []);
   }
+};
+
+module.exports = {
+  Auth,
+  Role,
 };

@@ -1,6 +1,12 @@
-import {body} from 'express-validator';
+const { body } = require('express-validator');
 
 const fieldRegisterRules = () => [
+  body('name')
+    .notEmpty()
+    .withMessage('Please insert your name')
+    .bail()
+    .isLength({ min: 2, max: 15 })
+    .withMessage('Name min 8 max 15 character'),
   body('email')
     .notEmpty()
     .withMessage('Please insert your email')
@@ -10,7 +16,7 @@ const fieldRegisterRules = () => [
   body('password')
     .notEmpty()
     .withMessage('Plese insert your password')
-    .isLength({min: 8, max: 15})
+    .isLength({ min: 8, max: 15 })
     .withMessage('Password min 8 & max 15 character')
     .bail()
     .matches('[A-Z]')
@@ -36,7 +42,7 @@ const fieldChangePasswordRules = () => [
   body('password')
     .notEmpty()
     .withMessage('Plese insert your password')
-    .isLength({min: 8, max: 15})
+    .isLength({ min: 8, max: 15 })
     .withMessage('Password min 8 & max 15 character')
     .bail()
     .matches('[A-Z]')
@@ -61,21 +67,16 @@ const fieldLoginRules = () => [
 ];
 
 const fieldUpdateRules = () => [
-  body('email')
-  .notEmpty()
-  .withMessage('email cant empty')
-  .bail()
-  .isEmail()
-  .withMessage('your email is invalid'),
-  body('name')
-  .notEmpty()
-  .withMessage('name cant emtpy')
-]
+  body('email').notEmpty().withMessage('email cant empty').bail()
+    .isEmail()
+    .withMessage('your email is invalid'),
+  body('name').notEmpty().withMessage('name cant emtpy'),
+];
 
-export default {
+module.exports = {
   fieldRegisterRules,
   fieldForgotPasswordRules,
   fieldChangePasswordRules,
   fieldLoginRules,
-  fieldUpdateRules
+  fieldUpdateRules,
 };
