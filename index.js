@@ -13,7 +13,7 @@ import {responseError} from './src/helpers/helpers.js';
 import cookieParser from 'cookie-parser';
 
 const app = Express();
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT;
 
 const corsOpt = {
   credentials: true,
