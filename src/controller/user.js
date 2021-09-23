@@ -1,16 +1,17 @@
-import {response, responseError} from '../helpers/helpers.js';
-import userModel from '../models/user.js';
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
-import sendEmail from '../helpers/sendEmail.js';
-import sendEmailForgotPw from '../helpers/forgotPassword.js';
-import {v4 as uuidv4} from 'uuid';
-import path from 'path';
-import fs from 'fs';
+/* eslint-disable camelcase */
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const { v4: uuidv4 } = require('uuid');
+const path = require('path');
+const fs = require('fs');
+const sendEmailForgotPw = require('../helpers/forgotPassword');
+const sendEmail = require('../helpers/sendEmail');
+const userModel = require('../models/user');
+const { response, responseError } = require('../helpers/helpers');
 
-const register = async (req, res, next) => {
+const register = async (req, res) => {
   try {
-    const {name, email} = req.body;
+    const { name, email } = req.body;
     const existUser = await userModel.showUser(email);
     if (existUser.length > 0) {
       responseError(res, 'Error', 400, 'Email already registered', {});
@@ -27,7 +28,7 @@ const register = async (req, res, next) => {
         .then(async () => {
           const dataUser = await userModel.showUser(email);
           delete dataUser[0].password;
-          jwt.sign({...dataUser[0]}, process.env.VERIF_SECRET_KEY, (err, token) => {
+          jwt.sign({ ...dataUser[0] }, process.env.VERIF_SECRET_KEY, (err, token) => {
             if (err) {
               responseError(res, 'Error', 500, 'Failed create user token');
             } else {
@@ -38,7 +39,7 @@ const register = async (req, res, next) => {
                 'Success',
                 200,
                 `Your account successfully created, we send code activation link to ${email}`,
-                dataUser[0]
+                dataUser[0],
               );
             }
           });
@@ -47,15 +48,15 @@ const register = async (req, res, next) => {
           responseError(res, 'Error', 500, 'Failed register, please try again later', err);
         });
     }
-  } catch {
-    responseError(res, 'Error', 500, 'Failed register, please try again later', err);
+  } catch (error) {
+    responseError(res, 'Error', 500, 'Failed register, please try again later', error);
     // next(err);
   }
 };
 
 const activationAccount = async (req, res, next) => {
   try {
-    const {user_id} = req.decoded;
+    const { user_id } = req.decoded;
     userModel
       .activation(user_id)
       .then(() => {
@@ -71,13 +72,13 @@ const activationAccount = async (req, res, next) => {
 
 const forgotPassword = async (req, res, next) => {
   try {
-    const {email} = req.body;
+    const { email } = req.body;
     const existUser = await userModel.showUser(email);
     if (existUser.length === 0) {
       responseError(res, 'Error', 400, 'Your email not found', {});
     } else {
       delete existUser[0].password;
-      jwt.sign({...existUser[0]}, process.env.FORGOT_PASSWORD_SECRET_KEY, (err, token) => {
+      jwt.sign({ ...existUser[0] }, process.env.FORGOT_PASSWORD_SECRET_KEY, (err, token) => {
         if (err) {
           responseError(res, 'Error', 500, 'Failed create token forgot password');
         } else {
@@ -92,9 +93,9 @@ const forgotPassword = async (req, res, next) => {
   }
 };
 
-const checkTokenForgotPassword = (req, res, next) => {
-  const {token} = req.params;
-  const {decoded} = req;
+const checkTokenForgotPassword = (req, res) => {
+  const { token } = req.params;
+  const { decoded } = req;
   delete decoded.password;
   decoded.token = token;
   response(res, 'Success', 200, 'Link reset password success, now you can change your password', decoded);
@@ -102,8 +103,8 @@ const checkTokenForgotPassword = (req, res, next) => {
 
 const changePassword = async (req, res, next) => {
   try {
-    const {decoded} = req;
-    const {password, password2} = req.body;
+    const { decoded } = req;
+    const { password, password2 } = req.body;
     if (password === password2) {
       const salt = await bcrypt.genSalt(10);
       const newpassword = await bcrypt.hash(password, salt);
@@ -125,7 +126,7 @@ const changePassword = async (req, res, next) => {
 
 const login = async (req, res, next) => {
   try {
-    const {email, password} = req.body;
+    const { email, password } = req.body;
     const user = await userModel.showUser(email);
     if (user.length > 0) {
       if (user[0].activation === '0') {
@@ -135,8 +136,8 @@ const login = async (req, res, next) => {
           if (!err) {
             if (result) {
               delete user[0].password;
-              jwt.sign({...user[0]}, process.env.ACCESS_TOKEN_SECRET_KEY, (err, token) => {
-                if (!err) {
+              jwt.sign({ ...user[0] }, process.env.ACCESS_TOKEN_SECRET_KEY, (error, token) => {
+                if (!error) {
                   user[0].token = token;
                   // res.cookie('token', token, {
                   //   httpOnly: true,
@@ -154,7 +155,7 @@ const login = async (req, res, next) => {
                   // });
                   response(res, 'Sucess', 200, 'Login Successfull', user[0]);
                 } else {
-                  console.log(err);
+                  console.log(error);
                   responseError(res, 'Error', 500, 'Failed create access token');
                 }
               });
@@ -174,24 +175,24 @@ const login = async (req, res, next) => {
   }
 };
 
-const responseDataUser = (req, res, next) => {
+const responseDataUser = (req, res) => {
   const dataUser = req.userLogin;
   // console.log(dataUser);
   response(res, 'Success', 200, 'All data success loaded', dataUser);
 };
 
-const updateProfile = (req, res, next) => {
-  const {email, user_id} = req.userLogin;
+const updateProfile = (req, res) => {
+  const { email, user_id } = req.userLogin;
   let data = req.body;
   userModel
     .showUser(email)
     .then((result) => {
-      data = {...data, avatar: result[0].avatar};
+      data = { ...data, avatar: result[0].avatar };
 
       if (req.files) {
         const filename = uuidv4() + path.extname(req.files.avatar.name);
         const savePath = path.join(path.dirname(''), '/public/img/avatar', filename);
-        data = {...data, avatar: `/public/img/avatar/${filename}`};
+        data = { ...data, avatar: `/public/img/avatar/${filename}` };
         req.files.avatar.mv(savePath);
         if (result[0].avatar !== '/public/img/avatar/user.png') {
           fs.unlink(`./${result[0].avatar}`, (err) => {
@@ -217,16 +218,16 @@ const updateProfile = (req, res, next) => {
     });
 };
 
-const logout = async (req, res, next) => {
+const logout = async (req, res) => {
   try {
     res.clearCookie('token');
     response(res, 'Success', 200, 'Logout Success');
   } catch (error) {
-    responseError(res, 'Error', 500,'failed logout', error)
+    responseError(res, 'Error', 500, 'failed logout', error);
   }
 };
 
-export default {
+module.exports = {
   register,
   activationAccount,
   forgotPassword,

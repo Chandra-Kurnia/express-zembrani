@@ -1,17 +1,18 @@
-import {response, responseError, responsePagination} from '../helpers/helpers.js';
-import vehicleModel from '../models/vehicle.js';
-import {v4 as uuidv4} from 'uuid';
-import path from 'path';
-import fs from 'fs';
+/* eslint-disable camelcase */
+const { v4: uuidv4 } = require('uuid');
+const path = require('path');
+const fs = require('fs');
+const vehicleModel = require('../models/vehicle');
+const { response, responseError, responsePagination } = require('../helpers/helpers');
 
 const getVechile = (req, res, next) => {
   const keyword = req.query.keyword || '';
   const type = req.query.type || '';
   const limit = req.query.limit || 2;
-  let order = req.query.order || 'DESC';
-  let fieldOrder = req.query.fieldOrder || 'vehicle_id';
+  const order = req.query.order || 'DESC';
+  const fieldOrder = req.query.fieldOrder || 'vehicle_id';
   let page = req.query.page || 1;
-  let nextPage = parseInt(page) + 1;
+  let nextPage = parseInt(page, 10) + 1;
   let prevPage = page - 1;
   let start = 0;
 
@@ -56,7 +57,7 @@ const getVechile = (req, res, next) => {
 };
 
 const showVehicle = (req, res, next) => {
-  const id = req.params.id;
+  const { id } = req.params;
   vehicleModel
     .showVehicle(id)
     .then((result) => {
@@ -79,8 +80,10 @@ const getPopular = (req, res, next) => {
     });
 };
 
-const addVehicle = (req, res, next) => {
-  const {location_id, type_id, vehicle_name, price, status, stock, description} = req.body;
+const addVehicle = (req, res) => {
+  const {
+    location_id, type_id, vehicle_name, price, status, stock, description,
+  } = req.body;
   let data = {
     location_id,
     type_id,
@@ -94,7 +97,7 @@ const addVehicle = (req, res, next) => {
   if (req.files.vehicle_img) {
     const filename = uuidv4() + path.extname(req.files.vehicle_img.name);
     const savePath = path.join(path.dirname(''), '/public/img/vehicles', filename);
-    data = {...data, image: `/public/img/vehicles/${filename}`};
+    data = { ...data, image: `/public/img/vehicles/${filename}` };
     req.files.vehicle_img.mv(savePath);
   }
   vehicleModel
@@ -108,8 +111,10 @@ const addVehicle = (req, res, next) => {
 };
 
 const updateVehicle = (req, res, next) => {
-  const {location_id, type_id, vehicle_name, price, status, stock, description} = req.body;
-  const id = req.params.id;
+  const {
+    location_id, type_id, vehicle_name, price, status, stock, description,
+  } = req.body;
+  const { id } = req.params;
   vehicleModel
     .showVehicle(id)
     .then((result) => {
@@ -127,7 +132,7 @@ const updateVehicle = (req, res, next) => {
       if (req.files) {
         const filename = uuidv4() + path.extname(req.files.vehicle_img.name);
         const savePath = path.join(path.dirname(''), '/public/img/vehicles', filename);
-        data = {...data, image: `/public/img/vehicles/${filename}`};
+        data = { ...data, image: `/public/img/vehicles/${filename}` };
         req.files.vehicle_img.mv(savePath);
         fs.unlink(`./${result[0].image}`, (err) => {
           if (err) {
@@ -151,8 +156,8 @@ const updateVehicle = (req, res, next) => {
     });
 };
 
-const deleteVehicle = (req, res, next) => {
-  const id = req.params.id;
+const deleteVehicle = (req, res) => {
+  const { id } = req.params;
   vehicleModel
     .showVehicle(id)
     .then((result) => {
@@ -166,7 +171,7 @@ const deleteVehicle = (req, res, next) => {
           });
           response(res, 'Success', 200, 'Data succesfully deleted');
         })
-        .catch((err) => {
+        .catch(() => {
           responseError(res, 'Error delete', 500, 'Failed deleted vehicle please try again later');
         });
     })
@@ -177,7 +182,7 @@ const deleteVehicle = (req, res, next) => {
 
 const addtohomepage = async (req, res, next) => {
   try {
-    const {id} = req.params;
+    const { id } = req.params;
     const getopularvehicle = await vehicleModel.getPopular();
     const mostpopularvehicle = getopularvehicle[0];
     vehicleModel
@@ -195,7 +200,7 @@ const addtohomepage = async (req, res, next) => {
 
 const removefromhomepage = async (req, res, next) => {
   try {
-    const {id} = req.params;
+    const { id } = req.params;
     const getopularvehicle = await vehicleModel.getPopular();
     const mostpopularvehicle = getopularvehicle[3];
     vehicleModel
@@ -213,8 +218,8 @@ const removefromhomepage = async (req, res, next) => {
 
 const rental = async (req, res, next) => {
   try {
-    const user_id = req.userLogin.user_id;
-    let data = req.body;
+    const { user_id } = req.userLogin;
+    const data = req.body;
     data.user_id = user_id;
     const createRental = await vehicleModel.rental(data);
     if (createRental.affectedRows === 1) {
@@ -234,7 +239,7 @@ const rental = async (req, res, next) => {
   }
 };
 
-export default {
+module.exports = {
   getVechile,
   addVehicle,
   showVehicle,

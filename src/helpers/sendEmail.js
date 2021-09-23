@@ -1,5 +1,5 @@
-import nodemailer from '../configs/nodemailer.js';
-import email from '../template/email.js';
+const nodemailer = require('../configs/nodemailer');
+const email = require('../template/email');
 
 const sendEmail = (toEmail, token, name) => {
   nodemailer
@@ -24,4 +24,4 @@ const sendEmail = (toEmail, token, name) => {
       console.log(`Nodemailer Error : ${err}`);
     });
 };
-export default sendEmail;
+module.exports = sendEmail;

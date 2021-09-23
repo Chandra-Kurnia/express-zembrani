@@ -1,9 +1,9 @@
-import express from 'express';
-import vehicleController from '../controller/vehicle.js';
-import vehicleValidatons from '../validations/vehicleValidatons.js';
-import resultOftValidation from '../validations/validationResult.js';
-import imgValidation from '../validations/imgValidation.js';
-import {Auth, Role} from '../middlewares/auth.js';
+const express = require('express');
+const vehicleController = require('../controller/vehicle');
+const vehicleValidatons = require('../validations/vehicleValidatons');
+const resultOftValidation = require('../validations/validationResult');
+const imgValidation = require('../validations/imgValidation');
+const { Auth, Role } = require('../middlewares/auth');
 
 const router = express.Router();
 
@@ -19,14 +19,14 @@ router
     vehicleValidatons.createVehicleFieldRules(),
     (req, res, next) => {
       console.log(req.body);
-      next()
-    }, 
+      next();
+    },
     resultOftValidation,
     Auth,
     Role('admin'),
-    vehicleController.addVehicle
+    vehicleController.addVehicle,
   )
-  .post('/:id', Auth, Role('admin'),vehicleValidatons.updateVehicleFieldRules(), resultOftValidation, vehicleController.updateVehicle)
-  .post('/R/rental/', Auth,vehicleValidatons.rentalVehicleFieldRules(), resultOftValidation, vehicleController.rental)
-  .delete('/:id', Auth, Role('admin'),vehicleController.deleteVehicle);
-export default router;
+  .post('/:id', Auth, Role('admin'), vehicleValidatons.updateVehicleFieldRules(), resultOftValidation, vehicleController.updateVehicle)
+  .post('/R/rental/', Auth, vehicleValidatons.rentalVehicleFieldRules(), resultOftValidation, vehicleController.rental)
+  .delete('/:id', Auth, Role('admin'), vehicleController.deleteVehicle);
+module.exports = router;

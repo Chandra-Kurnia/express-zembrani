@@ -1,10 +1,11 @@
-import {response, responseError} from '../helpers/helpers.js';
-import historyModel from '../models/history.js';
-import rentalModel from '../models/rental.js';
+/* eslint-disable camelcase */
+const { response, responseError } = require('../helpers/helpers');
+const historyModel = require('../models/history');
+const rentalModel = require('../models/rental');
 
 const getHistory = async (req, res, next) => {
   try {
-    const user_id = req.userLogin.user_id;
+    const { user_id } = req.userLogin;
     const histories = await historyModel.getallhistory(user_id);
     if (histories.length > 0) {
       response(res, 'Success', 200, 'All history successfully loaded', histories);
@@ -18,7 +19,7 @@ const getHistory = async (req, res, next) => {
 
 const showHistory = async (req, res, next) => {
   try {
-    const {id} = req.params;
+    const { id } = req.params;
     const history = await historyModel.showHistory(id);
     if (history.length > 0) {
       response(res, 'Success', 200, 'Show history success', history[0]);
@@ -30,13 +31,13 @@ const showHistory = async (req, res, next) => {
   }
 };
 
-const deleteHistory = async (req, res, next) => {
-  const {rental_id} = req.body;
-  const user_id = req.userLogin.user_id
+const deleteHistory = async (req, res) => {
+  const { rental_id } = req.body;
+  const { user_id } = req.userLogin;
   const resDataRental = await historyModel.showHistory(rental_id);
-  const {quantity, vehicle_id, status} = resDataRental[0];
+  const { quantity, vehicle_id, status } = resDataRental[0];
   let deletedBy = '';
-  if (user_id == 1) {
+  if (user_id === 1) {
     deletedBy = 'deletedByAdmin';
   } else {
     deletedBy = 'deletedByUser';
@@ -53,9 +54,9 @@ const deleteHistory = async (req, res, next) => {
       .catch((err) => {
         responseError(res, 'Error', 500, 'Failed delete history, try again later', err);
       });
-  } else if ((status === 'pending') | (status === 'approved')) {
+  } else if ((status === 'pending') || (status === 'approved')) {
     responseError(res, 'Error', 400, 'This transaction is not finished yet');
-  } else if ((status === 'returned') | (status === 'canceled')) {
+  } else if ((status === 'returned') || (status === 'canceled')) {
     historyModel
       .deleteHistory(rental_id, deletedBy)
       .then(() => {
@@ -67,7 +68,7 @@ const deleteHistory = async (req, res, next) => {
   }
 };
 
-export default {
+module.exports = {
   getHistory,
   showHistory,
   deleteHistory,

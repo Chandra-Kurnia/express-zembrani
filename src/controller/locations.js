@@ -1,9 +1,9 @@
-import {response, responseError} from '../helpers/helpers.js';
-import locationsModel from '../models/locations.js';
+const { response } = require('../helpers/helpers');
+const locationsModel = require('../models/locations');
 
 const getlocations = async (req, res, next) => {
   try {
-    const keyword = req.query.keyword || ''
+    const keyword = req.query.keyword || '';
     const locations = await locationsModel.getlocations(keyword);
     if (locations.length > 0) {
       response(res, 'Success', 200, 'All data succesfully loaded', locations);
@@ -15,6 +15,6 @@ const getlocations = async (req, res, next) => {
   }
 };
 
-export default {
+module.exports = {
   getlocations,
 };
