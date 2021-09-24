@@ -199,7 +199,29 @@ const updateProfile = (req, res) => {
       userModel
         .updateProfile(data, user_id)
         .then(() => {
-          response(res, 'Success', 200, 'Succesfully updated data');
+          userModel.showUser(email)
+            .then((newDataUser) => {
+              delete newDataUser[0].password;
+              jwt.sign({ ...newDataUser[0] }, process.env.ACCESS_TOKEN_SECRET_KEY, (error, token) => {
+                if (!error) {
+                  newDataUser[0].token = token;
+                  res.cookie('token', token, {
+                    httpOnly: true,
+                    // maxAge: 60 * 60 * 60,
+                    secure: true,
+                    path: '/',
+                    sameSite: 'none',
+                  });
+                  response(res, 'Sucess', 200, 'Login Successfull', newDataUser[0]);
+                } else {
+                  console.log(error);
+                  responseError(res, 'Error', 500, 'Failed create access token');
+                }
+              });
+            })
+            .catch((err) => {
+              responseError(res, 'Error', 500, 'Update failed, try again later', err);
+            });
         })
         .catch((err) => {
           responseError(res, 'Error', 500, 'Update failed, try again later', err);
