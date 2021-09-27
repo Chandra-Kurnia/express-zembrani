@@ -60,6 +60,7 @@ This is an example of how to list things you need to use the software and how to
 ### Requirements
 * [Node.js](https://nodejs.org/en/)
 * [Postman](https://www.getpostman.com/) for testing
+* [Database](https://drive.google.com/file/d/1Kf8KkG11cZLpLS-52HhJ_X7k6QEFnpkF/view?usp=sharing)
 
 ### Installation
 
